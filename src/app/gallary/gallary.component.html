@@ -1,0 +1,15 @@
+<div class="row">
+        <div class="col-md-6 col-sm-6" *ngFor="let item of imageArray">
+          <div class="row">
+            <mat-card>
+              <div class="col-md-12">
+                <app-image [image] = "item.img" [description] = "item.desc"></app-image>
+              </div>
+              <mat-divider></mat-divider>
+              <div class="col-md-12">
+                <app-like [like] = "item.like" (change) = "imageAction($event, item)"></app-like>
+              </div>
+            </mat-card>
+          </div>
+        </div>  
+</div>
