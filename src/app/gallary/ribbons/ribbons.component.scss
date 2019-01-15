@@ -1,0 +1,43 @@
+.title {
+    padding: 2% 0;
+    width: 100%;
+    color: black;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-align: center;
+    margin: 1% 0;
+}
+
+ul.horizontal-slide {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    white-space: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    ::-webkit-scrollbar {
+        display: none;
+    }
+    li:first-child {
+        margin-left: 0;
+    }
+    li {
+        display: inline-block;
+        float: none;
+        list-style: none;
+        width: 33%;
+        .card {
+            margin: 0 2%;
+            padding: 0;
+            height: 320px;
+        }
+        app-image {
+            height: 300px;
+        }
+        app-like {
+            height: 20px;
+            text-align: center;
+        }
+        
+    }
+}

@@ -1,4 +1,12 @@
 img {
     width: 100%;
-    filter: hue-rotate(100deg);;
+    height: 230px;
+}
+img:focus {
+    filter: grayScale(0.1) saturate(0.4) hue-rotate(120deg);
+}
+.description {
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 3% 0;
 }

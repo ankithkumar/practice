@@ -1,0 +1,20 @@
+<div class="box">
+    <div class="col-md-12">
+        <mat-card class="title">
+            {{ collection.title }}
+        </mat-card>
+    </div>
+    <div class="col-md-12">
+        <ul class="horizontal-slide">
+            <li *ngFor="let image of collection.images">
+                <span class="col-xs-6 col-lg-4 col-md-4">
+                    <mat-card class="card">
+                        <app-image [image] = "image.img" [description] = "image.desc"></app-image>
+                        <mat-divider></mat-divider>
+                        <app-like [like] = "image.like" (change) = "imageAction($event, image)"></app-like>
+                    </mat-card>
+                </span>
+            </li>
+        </ul>  
+    </div>
+</div>

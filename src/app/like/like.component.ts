@@ -10,6 +10,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class LikeComponent {
     @Input('like') liked: boolean;
     @Output()
+    
     change: EventEmitter<boolean>  = new EventEmitter<boolean>(); 
     constructor() {
         console.log('in likepage');

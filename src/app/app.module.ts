@@ -4,15 +4,17 @@ import { ImageComponent } from './image/image.component';
 import { AppComponent } from './app.component';
 import { LikeComponent } from './like/like.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatGridListModule, } from '@angular/material/grid-list';
-import {MatIconModule} from '@angular/material/icon';
-import {MatCardModule } from '@angular/material';
-import {MatDividerModule} from '@angular/material/divider';
+import { MatGridListModule, } from '@angular/material/grid-list';
+import { MatIconModule} from '@angular/material/icon';
+import { MatCardModule } from '@angular/material';
+import { MatDividerModule} from '@angular/material/divider';
 import { UploadImageComponent } from '../app/uploadImage/uploadImage.component';
 import { AppRoutingModule } from './app-routing.module';
 import { GallaryComponent } from './gallary/gallary.component';
-import {MatToolbarModule} from '@angular/material/toolbar';
+import { MatToolbarModule} from '@angular/material/toolbar';
 import { FavoriteComponent } from './favorite/favorite.component';
+import { RibbonsComponent } from './gallary/ribbons/ribbons.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import { FavoriteComponent } from './favorite/favorite.component';
     LikeComponent,
     UploadImageComponent,
     GallaryComponent,
-    FavoriteComponent
+    FavoriteComponent,
+    RibbonsComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +34,8 @@ import { FavoriteComponent } from './favorite/favorite.component';
     MatCardModule,
     MatDividerModule,
     AppRoutingModule,
-    MatToolbarModule
+    MatToolbarModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
