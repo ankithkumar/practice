@@ -14,13 +14,14 @@ if(isset($postdata) && !empty($postdata)) {
   }
 
   // Sanitize
+  $email = mysqli_real_escape_string($conn, trim($request->data->email));
   $collection = mysqli_real_escape_string($conn, trim($request->data->title));
   $image = mysqli_real_escape_string($conn, trim($request->data->images->img));
   $desc = mysqli_real_escape_string($conn, trim($request->data->images->desc));
   $like = (bool) false;
   
   // Store.
-  $sql = "INSERT INTO collection VALUES ('{$collection}', '{$image}' , '{$desc}', '{$like}')";
+  $sql = "INSERT INTO collection VALUES ('{$email}', '{$collection}', '{$image}' , '{$desc}', '{$like}')";
   if(mysqli_query($conn , $sql))
   {
     http_response_code(201);

@@ -53,8 +53,8 @@ export class ImageService {
     }
 
     handleError(error: HttpErrorResponse) {
-        console.log('http error ', error);
-        return throwError('Error! something Wrong happened');
+            console.log('http error ', error);
+            return throwError(error);    
     }
 
     createCollection(value) {
@@ -183,6 +183,9 @@ export class ImageService {
 
     store(colletionData): Observable<any> {
         console.log(colletionData);
+        let user = this.userService.getUser();
+        colletionData.email = user.email;
+        console.log('collection ', colletionData); 
         return this.http.post(`${this.baseUrl}/store`, { data: colletionData })
         .pipe(map((res: Collection) => {
             console.log('here!! sent successfullty!!', res);

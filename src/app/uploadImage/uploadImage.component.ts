@@ -41,6 +41,9 @@ export class UploadImageComponent {
                     }
                 }, error => {
                     this.loading = false;
+                    if (error.status == 201) {
+                        return;
+                    } 
                     this.message = this.placeholder.ERROR;
                 })
             this.message = this.placeholder.SUCCESS;
