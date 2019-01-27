@@ -1,6 +1,13 @@
 <div class="jumbotron" *ngIf="message">
     <h1 class="text-danger text-center">{{ message }}</h1>
 </div>
+
+<div class="row" *ngIf="loading">
+   <div class="col-xs-12 col-md-12">
+    <app-spinner></app-spinner>
+  </div>
+</div>
+
 <form>
     <div class="form-group row">
       <label for="image" class="col-sm-2 col-form-label">Image</label>

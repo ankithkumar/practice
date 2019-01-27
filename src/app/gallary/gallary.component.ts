@@ -2,6 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { ImageService } from '../service/image.service';
 import { Subscription } from 'rxjs';
 import _ from 'lodash';
+import { Collection } from '../modal/collection';
 
 @Component({
     selector: 'app-gallary',
@@ -10,18 +11,34 @@ import _ from 'lodash';
 })
 
 export class GallaryComponent implements OnDestroy {    
-    collections;
-
+    collections: any = [];
+    loading: boolean = true;
+    error: string = null;
     private collectionSubscriber: Subscription;
 
     constructor(private imageService: ImageService) {
         console.log('this is gallary');
-        this.collections = this.imageService.getCollection();
-
+        this.loading = true;
         this.collectionSubscriber = this.imageService.getCollectionUpdatedListener()
             .subscribe(imageCollections => {
                 this.collections = imageCollections;
+                this.loading = false;
+                console.log('this collection ', this.collections);
+            }, error => {
+                this.error = error;
+                console.log('error occurred', error);
+                this.loading = false;
             });
+        this.imageService.getCategories()
+            .then(collection => {
+                console.log('val is ',collection);
+                this.collections = collection;
+            })
+            .catch(error => {
+                this.error = error;
+                this.loading = false;
+                console.log('error occurred', error);
+            })
     }
 
     Liked(likedImage, changedCollection) {

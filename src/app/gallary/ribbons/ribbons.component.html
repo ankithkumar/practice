@@ -7,11 +7,16 @@
     <div class="col-md-12">
         <ul class="horizontal-slide">
             <li *ngFor="let image of collection.images">
-                <span class="col-xs-6 col-lg-4 col-md-4">
+                <span class="col-xs-12 col-lg-4 col-md-4">
                     <mat-card class="card">
                         <app-image [image] = "image.img" [description] = "image.desc"></app-image>
                         <mat-divider></mat-divider>
-                        <app-like [like] = "image.like" (change) = "imageAction($event, image)"></app-like>
+                        <span class="col-xs-12 col-lg-6 col-md-6">
+                            <app-like class="point" [like] = "image.like" (change) = "imageAction($event, image)"></app-like>
+                        </span>
+                        <span class="col-xs-12 col-lg-6 col-md-6">
+                            <app-delete class="point"></app-delete>
+                        </span>
                     </mat-card>
                 </span>
             </li>

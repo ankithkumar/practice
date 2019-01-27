@@ -1,102 +1,55 @@
 import { Injectable } from '@angular/core';
 import { LocalStorage } from '@ngx-pwa/local-storage';
 import { Subject } from 'rxjs';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { Collection } from '../modal/collection';
+import { Images } from '../modal/images';
 import _ from 'lodash';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 
 export class ImageService {
-    name = 'collection';
+    name = 'ImageCollection';
     baseUrl = 'http://localhost/backend';
-    collection: any = [
-        {
-            title: 'outdoor',
-            images: [
-                {
-                    img: 'https://www.gstatic.com/webp/gallery3/1.png',
-                    desc: 'some description',
-                    like: false
-                }, {
-                    img  : 'https://image.shutterstock.com/image-photo/parents-giving-children-piggyback-ride-450w-388719088.jpg',
-                    desc : 'Parents giving children piggyback!!',
-                    like : false
-                },
-                {
-                    img: 'https://www.gstatic.com/webp/gallery3/1.png',
-                    desc: 'this is another description',
-                    like: false
-                }
-            ]
-        },
-        {
-            title: 'family',
-            images: [
-                {
-                    img: 'https://www.gstatic.com/webp/gallery3/1.png',
-                    desc: 'something',
-                    like: true
-                }, {
-                    img  : 'https://image.shutterstock.com/image-photo/parents-giving-children-piggyback-ride-450w-388719088.jpg',
-                    desc : 'Parents giving children piggyback!!',
-                    like : true
-                },
-                {
-                    img: 'https://www.gstatic.com/webp/gallery3/1.png',
-                    desc: 'this is another description',
-                    like: false
-                },
-                {
-                    img: 'https://www.gstatic.com/webp/gallery3/1.png',
-                    desc: 'this is another description',
-                    like: false
-                }
-            ]
-        }, {
-            title: 'ocean',
-            images: [
-                {
-                    img: 'https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg',
-                    desc: 'ocean brings the peace',
-                    like: false
-                }, {
-                    img: 'https://images.pexels.com/photos/37403/bora-bora-french-polynesia-sunset-ocean.jpg',
-                    desc: 'this is another ocean',
-                    like: true
-                }, {
-                    img: 'https://images.pexels.com/photos/847393/pexels-photo-847393.jpeg',
-                    desc: 'turtles travels far in sea',
-                    like: true
-                }
-            ]
-        }
-    ];
-
+    imageCollection: Collection[] = [];
     private collectionUpdated = new Subject();
 
-    constructor(protected localStorage: LocalStorage, public http: HttpClient) {
-      this.getAll().subscribe(values => {
-          console.log('got the values ', values);
-      }, error => {
-        console.log('failed! ',error);
-      })
+    constructor(protected localStorage: LocalStorage, public userService: UserService,public http: HttpClient) {
       console.log('here in imageService');
-      this.init()
-      this.collectionUpdated.next([...this.collection]);
       //remove this once update is implemented
-      this.setLocalStorage();
+      // this.setLocalStorage();
    }
 
+   getCategories() {
+       return new Promise<any>((resolve, reject) => {
+        if (this.imageCollection.length != 0) {
+            this.raiseUpdatedEvent();
+            resolve([...this.imageCollection]);
+            return;
+        }
+        this.getAll().subscribe(values => {
+            this.imageCollection = this.categoriesTheValues(values);
+            this.raiseUpdatedEvent();
+            resolve(this.imageCollection);
+            // this.initLocalStorage();
+        }, error => {
+            console.log('failed! ',error);
+            reject(error);
+        })
+       });
+    }
+
    getAll() {
-        return this.http.get(`${this.baseUrl}/getCollection`).pipe(
-        map(res => {
-            return res['data'];
-        }),
-        catchError(this.handleError));
+       return this.http.get(`${this.baseUrl}/getCollection`).pipe(
+            map(res => {
+                return res['data'];
+            }),
+            catchError(this.handleError));
     }
 
     handleError(error: HttpErrorResponse) {
@@ -104,23 +57,71 @@ export class ImageService {
         return throwError('Error! something Wrong happened');
     }
 
-    init() {
-        this.localStorage.getItem(this.name).subscribe((imagesCollection) => {
-            if (imagesCollection === null) {
-                console.log('firstTime');
-                this.setLocalStorage();
-            } else {
-                console.log('userData is ', imagesCollection);
-                this.collection = imagesCollection;
-                this.raiseUpdatedEvent();
-            }
-        }, (error) => {
-            console.log('could not get the data!!', error);
-        })
-   }
+    createCollection(value) {
+        let coll = {
+            title: value.Name,
+            images: [this.createImageData(value)]
+        }
+        return coll;
+    }
 
+    createImageData(value) {
+        return {
+            img: value.Image,
+            desc: value.Description,
+            like: value.Like
+        }
+    }
+
+    categoriesTheValues(values): Collection[] {
+        let user = this.userService.getUser();
+        let collections: Collection[] = [];
+        let newCollections = _.filter(values, value => {
+            if (value.email === user.email) {
+                return value;
+            }
+        })
+        console.log('collection is ', collections);
+        _.each(newCollections, value => {
+            if (collections.length == 0) {
+                collections.push(this.createCollection(value));
+            } else {
+                let found = false;
+                _.each(collections, collection => {
+                    if (collection.title == value.Name) {
+                        console.log('1', collection);
+                        collection.images.push(this.createImageData(value));
+                        found = true;
+                    }
+                })
+                if (!found) {
+                    collections.push(this.createCollection(value));   
+                }
+            }
+            console.log('loop ', collections);
+        })
+        console.log('categories ', collections);
+        return collections;
+    }
+
+    // initLocalStorage() {
+    //     this.localStorage.getItem(this.name).subscribe((imagesCollection: Collection[]) => {
+    //         if (imagesCollection === null) {
+    //             console.log('firstTime');
+    //             this.setLocalStorage();
+    //         } else {
+    //             console.log('userData is ', imagesCollection);
+    //             this.imageCollection = imagesCollection;
+    //             this.raiseUpdatedEvent();
+    //         }
+    //     }, (error) => {
+    //         console.log('could not get the data!!', error);
+    //     })
+    // }
+   
     raiseUpdatedEvent() {
-        this.collectionUpdated.next([...this.collection]);
+        console.log('updating ', this.imageCollection);
+        this.collectionUpdated.next([...this.imageCollection]);
     }
 
     getCollectionUpdatedListener() {
@@ -128,51 +129,65 @@ export class ImageService {
     }
 
     getCollection() {
-        return [...this.collection];
+        return [...this.imageCollection];
     }
     
-    setLocalStorage() {
-        this.localStorage.setItem(this.name, this.collection)
-        .subscribe(imagesCollection => {
-            console.log('set to  array!!', imagesCollection);
-        }, (error) => {
-            console.log('could not write the item !', error);
-        })
-    }
+    // setLocalStorage() {
+    //     this.localStorage.setItem(this.name, this.imageCollection)
+    //     .subscribe(imagesCollection => {
+    //         console.log('set to  array!!', imagesCollection);
+    //     }, (error) => {
+    //         console.log('could not write the item !', error);
+    //     })
+    // }
 
     updateCollection(updatedVal) {
-        this.collection = updatedVal;
-        this.setLocalStorage();
+        this.imageCollection = updatedVal;
+        // this.setLocalStorage();
     }
 
-    addToCategory(url, collectionName, description, liked = false) {
+    fitInTheCategory(collection, data) {
         let isImageFound: boolean = false;
-        let image = {
-                img: url,
-                desc: description,
-                like: liked
+        let images = {
+            img: data.images.img,
+            desc: data.images.desc,
+            like: data.images.like
         };
-        _.forEach(this.collection, item => {
-            if (item.title === collectionName) {
+        _.forEach(collection, item => {
+            if (item.title === data.title) {
                 if (item.images) {
-                    item.images.push(image);
+                    item.images.push(images);
                 } else {
                     item.images = [];
-                    item.images.push(image);
+                    item.images.push(images);
                 }
                 isImageFound = true;
             }
         })
         if (!isImageFound) {
             let item = {
-                title: collectionName,
+                title: data.title,
                 images: [
-                    image
+                    images
                 ]
             };
-            this.collection.push(item);
+            this.imageCollection.push(item);
         }
-        this.setLocalStorage();
+    }
+
+    addToCategory(collection: Collection) {
+        this.fitInTheCategory(this.imageCollection, collection);
+        // this.setLocalStorage();
         this.raiseUpdatedEvent();
+    }
+
+    store(colletionData): Observable<any> {
+        console.log(colletionData);
+        return this.http.post(`${this.baseUrl}/store`, { data: colletionData })
+        .pipe(map((res: Collection) => {
+            console.log('here!! sent successfullty!!', res);
+            return true;
+        }),
+        catchError(this.handleError));
     }
 }

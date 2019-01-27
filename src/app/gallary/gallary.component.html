@@ -1,4 +1,19 @@
+<div class="row" *ngIf="loading">
+    <div class="col-xs-12 col-md-12">
+      <app-spinner></app-spinner>
+    </div>
+</div>
+<div class="row" *ngIf="error">
+    <div class="col-xs-12 col-md-12 text-center">
+      {{ error }}
+    </div>
+</div>
 <div class="row">
+  <div class="col-md-12" *ngIf="collections.length == 0">
+    <p class="text-center">No collection yet</p>
+  </div>
+</div>
+<div class="row" *ngIf="collections.length !== 0">
   <div class="col-md-12" *ngFor="let collection of collections">
     <app-ribbon [collection] = "collection" (isLiked) = "Liked(event, collection)"></app-ribbon>
   </div>

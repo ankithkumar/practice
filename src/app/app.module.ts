@@ -15,6 +15,10 @@ import { MatToolbarModule} from '@angular/material/toolbar';
 import { FavoriteComponent } from './favorite/favorite.component';
 import { RibbonsComponent } from './gallary/ribbons/ribbons.component';
 import { HttpClientModule } from '@angular/common/http';
+import { DeleteComponent } from './delete/delete.component';
+import { LoginComponent } from './account/login/login.component';
+import { RegisterComponent } from './account/register/register.component';
+import { SpinnerComponent } from './spinner/spinner.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +28,11 @@ import { HttpClientModule } from '@angular/common/http';
     UploadImageComponent,
     GallaryComponent,
     FavoriteComponent,
-    RibbonsComponent
+    RibbonsComponent,
+    DeleteComponent,
+    LoginComponent,
+    RegisterComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,

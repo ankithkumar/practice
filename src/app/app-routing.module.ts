@@ -3,16 +3,24 @@ import { RouterModule, Routes } from '@angular/router';
 import { UploadImageComponent } from './uploadImage/uploadImage.component';
 import { GallaryComponent } from './gallary/gallary.component';
 import { FavoriteComponent } from './favorite/favorite.component';
+import { LoggedInGuard } from './service/logged.in.guard';
+import { LoginComponent } from './account/login/login.component';
+import { RegisterComponent } from './account/register/register.component';
 
 const routes: Routes = [{
-  path: '', component: UploadImageComponent, pathMatch: 'full'
+  path: '', component: UploadImageComponent, pathMatch: 'full', canActivate: [LoggedInGuard]
 }, {
-  path: 'upload', component: UploadImageComponent
+  path: 'upload', component: UploadImageComponent, canActivate: [LoggedInGuard]
 }, {
-  path: 'gallary', component: GallaryComponent
+  path: 'gallary', component: GallaryComponent, canActivate: [LoggedInGuard]
 }, {
-  path: 'favorite', component: FavoriteComponent
+  path: 'favorite', component: FavoriteComponent, canActivate: [LoggedInGuard]
+},{
+  path: 'login', component: LoginComponent, canActivate: [LoggedInGuard]
+}, {
+  path: 'register', component: RegisterComponent, canActivate: [LoggedInGuard]
 }];
+
 @NgModule({
   imports: [ RouterModule.forRoot(routes) ],
   exports: [
