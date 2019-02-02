@@ -11,11 +11,16 @@
                     <mat-card class="card">
                         <app-image [image] = "image.img" [description] = "image.desc"></app-image>
                         <mat-divider></mat-divider>
-                        <span class="col-xs-12 col-lg-6 col-md-6">
-                            <app-like class="point" [like] = "image.like" (change) = "imageAction($event, image)"></app-like>
-                        </span>
-                        <span class="col-xs-12 col-lg-6 col-md-6">
-                            <app-delete class="point"></app-delete>
+                        <span class="row action">
+                                <span class="col-xs-12 col-lg-4 col-md-4">
+                                    <app-like class="point" [like] = "image.like" (change) = "imageAction($event, image)"></app-like>
+                                </span>
+                                <span class="col-xs-12 col-lg-4 col-md-4">
+                                    <app-delete class="point"></app-delete>
+                                </span>
+                                <span class="col-xs-12 col-lg-4 col-md-4">
+                                    <p class="text-danger" *ngIf="placeholder && image.img == selectedImage">{{placeholder}}</p>
+                                </span>
                         </span>
                     </mat-card>
                 </span>

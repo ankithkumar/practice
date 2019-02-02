@@ -37,9 +37,11 @@ export class UserService {
   }
 
   handleError(error: HttpErrorResponse) {
-    console.log('http error ', error);
-    return throwError('Error! something Wrong happened');
-  }
+      if (error.status == 401) {
+          return throwError('Please enter correct credentials!');
+      }
+      return throwError('Error! something Wrong happened, check back Later');
+   }
 
   login(email, password): Observable<any> { 
     let collection = {

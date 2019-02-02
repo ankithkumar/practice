@@ -6,27 +6,41 @@ import constants from './../app.constant';
 
 @Component({
     selector : 'app-uploadimage',
-    templateUrl : './uploadImage.component.html'
+    templateUrl : './uploadImage.component.html',
+    styleUrls: ['./uploadImage.component.scss']
 })
+
 export class UploadImageComponent {
     message: string;
     loading: boolean = false;
     placeholder = constants.PLACEHOLDER;
-
+    initial: string = 'select type'
+    collection = [];
     constructor(public imageService: ImageService) {
-        console.log('hi upload');
+        this.collection.splice(0, 0, {name: this.initial});
+        this.imageService.getCollectionName()
+            .subscribe(res => {
+                this.collection = res;
+                this.collection.splice(0, 0, {name: this.initial});
+                console.log('this.collection ', this.collection);
+            }, error => {
+                console.log('error in uploadImage is ', error);
+            })
     }
 
-    saveImage(url, category, description, liked = false) {
+    saveImage(url, description, category, selectCategory) {
         this.message = null;
-        if (url == "" || category == "" || description == "") {
+        if (url == "" || description == "") {
+            this.message = this.placeholder.FAILURE;
+        } else if (selectCategory === this.initial && category == "") {
             this.message = this.placeholder.FAILURE;
         } else {
+            category = selectCategory !== this.initial ? selectCategory : category;
             this.loading = true;
             let images: any = {
                 img: url,
                 desc: description,
-                like: liked
+                like: false
             }
             let collection: Collection = {
                 'title': category,

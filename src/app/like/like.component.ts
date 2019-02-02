@@ -13,13 +13,14 @@ export class LikeComponent {
     
     change: EventEmitter<boolean>  = new EventEmitter<boolean>(); 
     constructor() {
-        console.log('in likepage');
-        this.liked = false;
+        console.log('in likepage ', this.liked);
+        // this.liked = false;
     }
 
     likedImage() {
-        let like = !this.liked;
-        console.log('like ', like);
-        this.change.emit(like);
+        console.log('liked Image ', this.liked);
+        this.liked = !this.liked;
+        console.log('like 1', this.liked);
+        this.change.emit(this.liked);
     }
 }

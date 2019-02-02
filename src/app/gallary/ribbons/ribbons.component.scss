@@ -27,19 +27,20 @@ ul.horizontal-slide {
         display: inline-block;
         float: none;
         list-style: none;
-        width: 33%;
+        width: 31vw;
         .card {
             margin: 0 2%;
             padding: 0;
-            height: 320px;
-        }
-        app-image {
-            height: 300px;
-        }
-        app-like {
-            height: 20px;
-            text-align: center;
-        }
-        
+            height: 45vh;
+            &:hover {
+                border: 2px solid blue;
+            }
+            app-image {
+                height: 39vh;
+            }
+            .action {
+                height: 6vh;;
+            }
+        }        
     }
 }

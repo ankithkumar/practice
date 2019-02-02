@@ -6,6 +6,7 @@ import { FavoriteComponent } from './favorite/favorite.component';
 import { LoggedInGuard } from './service/logged.in.guard';
 import { LoginComponent } from './account/login/login.component';
 import { RegisterComponent } from './account/register/register.component';
+import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [{
   path: '', component: UploadImageComponent, pathMatch: 'full', canActivate: [LoggedInGuard]
@@ -19,6 +20,8 @@ const routes: Routes = [{
   path: 'login', component: LoginComponent, canActivate: [LoggedInGuard]
 }, {
   path: 'register', component: RegisterComponent, canActivate: [LoggedInGuard]
+}, {
+  path: 'settings', component: SettingsComponent, canActivate: [LoggedInGuard]
 }];
 
 @NgModule({

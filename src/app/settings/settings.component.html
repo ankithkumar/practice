@@ -1,0 +1,47 @@
+<div class="text-center strong jumbotron text-danger">
+    Welcome to settings page
+</div>
+<div class="row" *ngIf="loading">
+    <div class="col-xs-12 col-md-12">
+        <app-spinner></app-spinner>
+    </div>
+</div>
+<form>
+    <div class="form-group row">
+        <label for="Name" class="col-sm-2 col-form-label strong text-danger">Name</label>
+        <div class="col-xs-8 col-md-8 text-center text-info" *ngIf="!editing">somename</div>
+        <div class="col-sm-10" *ngIf="editing">
+            <input type="text" class="form-control" autofocus id="image" placeholder="image" #name>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="email" class="col-sm-2 col-form-label strong text-danger">email</label>
+        <div class="col-xs-8 col-md-8 text-center text-info" *ngIf="!editing">emailId</div>
+        <div class="col-sm-10" *ngIf="editing">
+            <input type="email" class="form-control" autofocus id="image" placeholder="email" #email>
+        </div>
+    </div>
+    <div class="form-group row" *ngIf="editing">
+        <label for="pwd1" class="col-sm-2 col-form-label strong text-danger">Enter New Password</label>
+        <div class="col-sm-10" >
+            <input type="password" class="form-control" autofocus id="image" placeholder="new password" #password1>
+        </div>
+        <label for="pwd2" class="col-sm-2 col-form-label strong text-danger">repeat password</label>
+        <div class="col-sm-10" >
+            <input type="password" class="form-control" autofocus id="image" placeholder="image" #password2>
+        </div>
+    </div>
+    <div class="form-group row" *ngIf="editing">
+        <div class="col-sm-12 col-md-12">
+            <input type="button" class=" btn btn-primary" 
+                (click)="saveDetails(name.value, email.value, password1.value, password2.value)" 
+                value="saveDetails"
+            />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-12 col-md-12">
+            <button class=" btn btn-primary" (click)="toggle()">{{ editing ? 'cancel' : 'edit'}}</button>
+        </div>
+    </div>
+</form>

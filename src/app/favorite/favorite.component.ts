@@ -14,6 +14,7 @@ export class FavoriteComponent {
         this.desc = 'Parents giving children piggyback!!';
         this.like = false;
     }
+    
     imageAction(updatedValue){
         this.like = updatedValue;
     }

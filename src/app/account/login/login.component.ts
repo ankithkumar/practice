@@ -31,7 +31,7 @@ export class LoginComponent {
                 this.router.navigate([`/${this.route.gallary}`]);
                 this.loading = false;
             }, (error: any) => {
-                this.error = 'something wrong happended, check back later!',
+                this.error = error,
                 this.loading = false;
             })
     }

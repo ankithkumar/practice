@@ -6,7 +6,7 @@ import { LikeComponent } from './like/like.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatGridListModule, } from '@angular/material/grid-list';
 import { MatIconModule} from '@angular/material/icon';
-import { MatCardModule } from '@angular/material';
+import { MatCardModule, MatFormFieldModule } from '@angular/material';
 import { MatDividerModule} from '@angular/material/divider';
 import { UploadImageComponent } from '../app/uploadImage/uploadImage.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -19,7 +19,9 @@ import { DeleteComponent } from './delete/delete.component';
 import { LoginComponent } from './account/login/login.component';
 import { RegisterComponent } from './account/register/register.component';
 import { SpinnerComponent } from './spinner/spinner.component';
-
+import { SettingsComponent } from './settings/settings.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import {MatExpansionModule} from '@angular/material/expansion';
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +34,9 @@ import { SpinnerComponent } from './spinner/spinner.component';
     DeleteComponent,
     LoginComponent,
     RegisterComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    SettingsComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +47,9 @@ import { SpinnerComponent } from './spinner/spinner.component';
     MatDividerModule,
     AppRoutingModule,
     MatToolbarModule,
-    HttpClientModule
+    HttpClientModule,
+    MatExpansionModule,
+    MatFormFieldModule
   ],
   providers: [],
   bootstrap: [AppComponent]

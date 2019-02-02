@@ -45,10 +45,11 @@ export class ImageService {
     }
 
    getAll() {
-       return this.http.get(`${this.baseUrl}/getCollection`).pipe(
-            map(res => {
-                return res['data'];
-            }),
+       let params = new HttpParams();
+       let user = this.userService.getUser();
+       params = params.append('email', user.email);
+       return this.http.get(`${this.baseUrl}/getCollection`, {params: params}).pipe(
+            map(res => res['data']),
             catchError(this.handleError));
     }
 
@@ -69,20 +70,13 @@ export class ImageService {
         return {
             img: value.Image,
             desc: value.Description,
-            like: value.Like
+            like: (value.Liked === "1") ? true : ((value.Liked === "0") ? false : value.Liked)
         }
     }
 
     categoriesTheValues(values): Collection[] {
-        let user = this.userService.getUser();
         let collections: Collection[] = [];
-        let newCollections = _.filter(values, value => {
-            if (value.email === user.email) {
-                return value;
-            }
-        })
-        console.log('collection is ', collections);
-        _.each(newCollections, value => {
+        _.each(values, value => {
             if (collections.length == 0) {
                 collections.push(this.createCollection(value));
             } else {
@@ -98,9 +92,7 @@ export class ImageService {
                     collections.push(this.createCollection(value));   
                 }
             }
-            console.log('loop ', collections);
         })
-        console.log('categories ', collections);
         return collections;
     }
 
@@ -192,5 +184,29 @@ export class ImageService {
             return true;
         }),
         catchError(this.handleError));
+    }
+
+    getCollectionName(): Observable<any> {
+        return this.http.get(`${this.baseUrl}/getCollectionType`)
+            .pipe(map(res => res['data']),
+            catchError(this.handleError));
+    }
+
+    updateFavorite(title, image) {
+        let data = {
+            title, 
+            'images' : image
+        };
+        let params = new HttpParams();
+        let user = this.userService.getUser();
+        params = params.append('email', user.email);
+        params = params.append('title', data.title);
+        params = params.append('img', data.images.img);
+        params = params.append('like', data.images.like);
+        console.log('data' , params);
+        return this.http.get(`${this.baseUrl}/updateFavorite`, {params: params})
+        .pipe(res => res,
+            catchError(this.handleError)
+        );
     }
 }

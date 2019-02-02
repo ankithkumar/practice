@@ -1,0 +1,32 @@
+mat-icon{
+    font-family: 'Material Icons' !important;
+}
+
+mat-card {
+    margin: 0 2% 2% 0;
+}
+
+.focus {
+    background-color: blue;
+    color: white;
+    font-weight: 600;
+}
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid black;
+    ul {
+        width: 100%;
+        li {
+            margin-right: 2%;
+            width: 20%;
+            display: inline-block;
+            mat-icon {
+                font-size: 40px;
+                color: grey;
+            }
+        }
+    }
+}
