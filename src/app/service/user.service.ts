@@ -91,5 +91,17 @@ export class UserService {
                     window.location.reload();
                 })
         }
-  }
+    }
+
+    getUserDetails() {
+        let params = new HttpParams();
+        let user = this.getUser();
+        params = params.append('email', user.email);
+        return this.http.get(`${this.baseUrl}/getUserDetails`, {params: params})
+            .pipe(map(res => {
+               console.log(res);
+               return res;  
+            }),
+            catchError(this.handleError));
+    }
 }

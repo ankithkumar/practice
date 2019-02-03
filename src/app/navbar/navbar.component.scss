@@ -7,8 +7,7 @@ mat-card {
 }
 
 .focus {
-    background-color: blue;
-    color: white;
+    background-color: rgba(10, 10, 255, 0.4);
     font-weight: 600;
 }
 
@@ -16,6 +15,7 @@ mat-card {
     position: sticky;
     top: 0;
     z-index: 1000;
+    color: red;
     border-bottom: 1px solid black;
     ul {
         width: 100%;
