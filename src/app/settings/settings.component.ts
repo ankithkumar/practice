@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { UserService } from '../service/user.service';
+import _ from 'lodash';
 
 @Component({
     selector: 'app-setting',
@@ -19,7 +20,7 @@ export class SettingsComponent {
 
     getUserDetails() {
         this.userService.getUserDetails()
-            .subscribe((res : any) => {
+            .then((res : any) => {
                 this.user = res.data;
                 console.log('user ',this.user);
                 this.loading = false;
@@ -39,22 +40,35 @@ export class SettingsComponent {
         if (name == "" && email == "" && (password1 == "" || password2 == "")) {
             return;
         }
-        if (name !== "") {
+        if (name !== "" && name != this.user.name) {
             details.name = name;
         }
-        if (email !== "") {
+        if (email !== "" && email != this.user.email) {
             details.email = email;
         }
         if (password1 !== "" && password2 != "") {
-            if (password1.value === password2) {
+            if (password1 === password2) {
                 details.password = password1;
             } else {
                 this.message = 'Passwords are not matching!!!';
                 return;
             }
         }
-        this.editing = false;
+        if (_.isEmpty(details)) {
+            return;
+        }
         this.loading = true;
-        console.log(details);
+        this.userService.updateUser(details)
+            .then(() => {
+                this.message = 'Completed Loading';
+                this.getUserDetails();
+            })
+            .catch(error => {
+                this.message = error;
+            })
+            .finally(() => {
+                this.editing = false;
+                this.loading = false;
+            });
     }
 }

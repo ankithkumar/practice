@@ -7,7 +7,7 @@ $postdata = file_get_contents("php://input");
 if(isset($postdata) && !empty($postdata)) {
   // Extract the data.
   $request = json_decode($postdata);
-  echo json_encode(["data" => $request->data]);
+  
   // Validate.
   if(trim($request->data->title) === '') {
     return http_response_code(400);

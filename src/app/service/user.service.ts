@@ -51,14 +51,7 @@ export class UserService {
     return this.http.post(`${this.baseUrl}/login`, { data: collection })
         .pipe(map((res: any) => {
             this.user = collection;
-            this.localStorage.setItem('auth_token', email)
-                .subscribe(() => {
-                    this.loggedIn = true;
-                    this.router.navigate([`/${this.route.gallary}`])
-                    console.log('here!! sent successfullty!!', res);    
-                }, (error) => {
-                    console.log('error !', error);
-                })
+            this.setEmail(collection.email, this.route.login)
             return true;
         }),
         catchError(this.handleError));
@@ -68,15 +61,23 @@ export class UserService {
       return this.user;
   }
 
+  setEmail(user, route = null) {
+        return this.localStorage.setItem('auth_token', user.email)
+            .subscribe(() => {
+                this.loggedIn = true; 
+                if (route) {
+                    this.router.navigate([`/${route}`]);
+                }
+            }, (error) => {
+                console.log('error !', error);
+            })
+  }
+
   register(user) {
        return this.http.post(`${this.baseUrl}/register`, { data : user})
         .pipe(map((res: any) => {
             this.user = user;
-            this.localStorage.setItem('auth_token', user.email)
-                .subscribe(() => {
-                    this.loggedIn = true;
-                    this.router.navigate([`/${this.route.upload}`])        
-                })
+            this.setEmail(user, this.route.upload);
             return true;
         }),
         catchError(this.handleError));
@@ -94,14 +95,41 @@ export class UserService {
     }
 
     getUserDetails() {
-        let params = new HttpParams();
-        let user = this.getUser();
-        params = params.append('email', user.email);
-        return this.http.get(`${this.baseUrl}/getUserDetails`, {params: params})
-            .pipe(map(res => {
-               console.log(res);
-               return res;  
-            }),
-            catchError(this.handleError));
+        console.log('userDetails ', this.user);
+        return new Promise(resolve => {
+            let params = new HttpParams();
+            let user = this.getUser();
+            params = params.append('email', user.email);
+            return this.http.get(`${this.baseUrl}/getUserDetails`, {params: params})
+                .pipe(map(res => {
+                    console.log(res);
+                    resolve(res);  
+                }),
+                catchError(this.handleError))
+                .toPromise();
+            })
+    }
+
+    updateUser(details) {
+        return new Promise((resolve, reject) => {
+            details.oldEmail = this.getUser().email;
+            return this.http.post(`${this.baseUrl}/updateDetails`, {data: details})
+                .pipe(map(res => {
+                    console.log('res from updateUser ', res);
+                    if (details.email) {
+                        return this.localStorage.setItem('auth_token', details.email)
+                            .subscribe(() => {
+                                this.user.email = details.email;
+                                resolve(res);
+                            }, error => {
+                                reject('error occurred');
+                            })
+                    } else {
+                        resolve(res);    
+                    }
+                }),
+                catchError(this.handleError))
+                .toPromise();
+            });
     }
 }
