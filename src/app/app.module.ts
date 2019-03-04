@@ -22,6 +22,8 @@ import { SpinnerComponent } from './spinner/spinner.component';
 import { SettingsComponent } from './settings/settings.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { LazyLoadImageModule, intersectionObserverPreset } from 'ng-lazyload-image';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,7 +51,10 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatToolbarModule,
     HttpClientModule,
     MatExpansionModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    LazyLoadImageModule.forRoot({
+      preset: intersectionObserverPreset
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
