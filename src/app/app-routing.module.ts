@@ -22,7 +22,11 @@ const routes: Routes = [{
   path: 'register', component: RegisterComponent, canActivate: [LoggedInGuard]
 }, {
   path: 'settings', component: SettingsComponent, canActivate: [LoggedInGuard]
-}];
+},
+{
+  path: '**', component: GallaryComponent, canActivate: [LoggedInGuard]
+}
+];
 
 @NgModule({
   imports: [ RouterModule.forRoot(routes) ],
