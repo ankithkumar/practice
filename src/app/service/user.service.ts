@@ -2,13 +2,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { LocalStorage } from '@ngx-pwa/local-storage';
-import { Subject } from 'rxjs';
 import constant from './../app.constant';
 import { Router, CanActivate } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import _ from 'lodash';
-import { containsTree } from '@angular/router/src/url_tree';
 
 
 @Injectable({
@@ -18,7 +16,7 @@ import { containsTree } from '@angular/router/src/url_tree';
 export class UserService {
   private loggedIn = false;
   route = constant.ROUTE;
-  baseUrl = 'http://localhost/backend';
+  baseUrl = 'http://photocollection.xyz/backend';
   user: any = {};
   constructor(public http: HttpClient, protected localStorage: LocalStorage, private router: Router) {
     this.localStorage.getItem('auth_token')
@@ -51,7 +49,7 @@ export class UserService {
     return this.http.post(`${this.baseUrl}/login`, { data: collection })
         .pipe(map((res: any) => {
             this.user = collection;
-            this.setEmail(collection.email, this.route.login)
+            this.setEmail(collection.email, this.route.gallary)
             return true;
         }),
         catchError(this.handleError));
@@ -62,22 +60,22 @@ export class UserService {
   }
 
   setEmail(user, route = null) {
-        return this.localStorage.setItem('auth_token', user.email)
-            .subscribe(() => {
-                this.loggedIn = true; 
-                if (route) {
-                    this.router.navigate([`/${route}`]);
-                }
-            }, (error) => {
-                console.log('error !', error);
-            })
-  }
+    this.localStorage.setItem('auth_token', user)
+        .subscribe(() => {
+            this.loggedIn = true; 
+            if (route) {
+                this.router.navigate([`/${route}`]);
+            }
+        }, (error) => {
+            console.log('error !', error);
+        })
+    }
 
   register(user) {
        return this.http.post(`${this.baseUrl}/register`, { data : user})
         .pipe(map((res: any) => {
             this.user = user;
-            this.setEmail(user, this.route.upload);
+            this.setEmail(user.email, this.route.upload);
             return true;
         }),
         catchError(this.handleError));

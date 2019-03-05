@@ -15,7 +15,7 @@ import { UserService } from './user.service';
 
 export class ImageService {
     name = 'ImageCollection';
-    baseUrl = 'http://localhost/backend';
+    baseUrl = 'http://photocollection.xyz/backend';
     imageCollection: Collection[] = [];
     private collectionUpdated = new Subject();
 

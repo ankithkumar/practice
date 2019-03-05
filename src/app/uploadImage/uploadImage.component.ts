@@ -50,15 +50,15 @@ export class UploadImageComponent {
             this.imageService.store(collection)
                 .subscribe((res: any) => {
                     if (res.success) {
-                        this.loading = false;
                         this.message = this.placeholder.SUCCESS;
                     }
                 }, error => {
-                    this.loading = false;
                     if (error.status == 201) {
                         return;
                     } 
                     this.message = this.placeholder.ERROR;
+                }, () => {
+                    this.loading = false;
                 })
             this.message = this.placeholder.SUCCESS;
         }
