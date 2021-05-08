@@ -27,7 +27,7 @@
     "hammerjs": "^2.0.8",
     "jquery": "^3.3.1",
     "jquery-lazyload": "^1.9.7",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "ng-lazyload-image": "^5.0.0",
     "ngx-bootstrap": "^3.1.4",
     "rxjs": "~6.3.3",
